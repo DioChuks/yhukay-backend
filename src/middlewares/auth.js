@@ -1,6 +1,5 @@
 const passport = require('passport')
 const { StatusCodes, ReasonPhrases } = require('http-status-codes')
-const ApiError = require('../errors/ApiError')
 const { jwtError, jwtVerify, tokenError } = require('../utils/jwt')
 const getAccessTokenFromHeaders = require('../utils/headers')
 const User = require('../models/User')
@@ -11,13 +10,14 @@ const Gate = async (req, res, next) => {
 
     if (!accessToken) {
         return res.status(StatusCodes.UNAUTHORIZED).json({
-        message: 'No token provided!',
-        status: StatusCodes.UNAUTHORIZED
+          message: 'No token provided!',
+          status: StatusCodes.UNAUTHORIZED
         })
     }
 
     const decoded = jwtVerify({accessToken})
-    const user = await User.findById(decoded.sub)
+    console.log("decoded: "+decoded);
+    const user = await User.findOne({ where: { decoded } })
     console.log("user: "+user);
 
     if (!user) {
@@ -47,4 +47,14 @@ const Gate = async (req, res, next) => {
   return next()
 }
 
-module.exports = { Gate }
+const authorize = (roles = []) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.is_admin)) {
+      return res.status(StatusCodes.FORBIDDEN).json({ error: ReasonPhrases.FORBIDDEN });
+    }
+    next();
+  };
+};
+
+
+module.exports = { Gate, authorize }

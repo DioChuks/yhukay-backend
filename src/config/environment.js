@@ -43,6 +43,7 @@ const config = {
     user: envVars.DB_USER,
     password: envVars.DB_PASSWORD,
     database: envVars.DB_NAME,
+    dialect: 'mysql',
     multipleStatements: true,
   },
   sequelize: {

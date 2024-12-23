@@ -37,6 +37,10 @@ const User = sequelize.define('User', {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
+  otp: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
 }, {
   timestamps: true, // Automatically manages `created_at` and `updated_at`
   underscored: true, // Allows Sequelize to map camelCase field names to snake_case columns

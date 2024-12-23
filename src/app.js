@@ -1,15 +1,14 @@
 const express = require('express')
 const cors = require('cors')
 const helmet = require('helmet')
-const passport = require('passport')
 require('dotenv').config()
 const config = require('./config/environment')
 const morgan = require('./log/morgan')
-const jwtStrategy = require('./middlewares/passport')
 const authLimiter = require('./utils/rateLimiter')
 const { errorConverter, errorHandler } = require('./errors/error')
 const ApiError = require('./errors/ApiError')
 const { StatusCodes } = require('http-status-codes')
+const authRoutes = require('./routes/auths');
 
 const url = process.env.CLIENT_URL
 
@@ -35,10 +34,8 @@ app.use(cors(corsOption))
 app.options('*', cors(corsOption))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(passport.initialize())
-passport.use('jwt', jwtStrategy)
 if (config.env === 'production') {
-  app.use('/v1', authLimiter)
+  app.use('/api', authLimiter)
 }
 // Serve static video files
 app.use('/videos', express.static('videos'));
@@ -53,6 +50,8 @@ app.get('/v1/health-check', (request, response) => {
     date: new Date()
   });
 })
+
+app.use('/api/auth', authRoutes);
 
 // API route to get the video URL
 app.get('/api/video-url/:filename', (req, res) => {
