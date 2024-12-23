@@ -1,6 +1,6 @@
 const { Sequelize } = require('sequelize');
 const { StatusCodes } = require('http-status-codes')
-const config = require('../config/appConfig')
+const config = require('../config/environment')
 const logger = require('../log/logger')
 const ApiError = require('./ApiError')
 

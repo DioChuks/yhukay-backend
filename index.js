@@ -1,7 +1,7 @@
 const app = require('./src/app')
 const sequelize = require('./src/config/database');
 const logger = require('./src/log/logger')
-const config = require('./src/config/appConfig');
+const config = require('./src/config/environment');
 
 let server
 

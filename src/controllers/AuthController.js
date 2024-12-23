@@ -23,61 +23,8 @@ const logout = catchAsync(async (req, res) => {
   res.status(StatusCodes.NO_CONTENT).send()
 })
 
-const refreshTokens = catchAsync(async (req, res) => {
-  const userWithTokens = await authService.refreshAuth(req.body.refreshToken)
-  res.send({ ...userWithTokens })
-})
-
-const forgotPassword = catchAsync(async (req, res) => {
-  const resetPasswordToken = await tokenService.generateResetPasswordToken(
-    req.body.email
-  )
-  await emailService.sendResetPasswordEmail(req.body.email, resetPasswordToken)
-  res.status(StatusCodes.NO_CONTENT).send()
-})
-
-const forgotPasswordWithOtp = catchAsync(async (req, res) => {
-    const otp = await authService.generateAndSendOTP(
-    req.body.email
-  )
-  await emailService.sendResetPasswordEmailWithOtp(req.body.email, otp)
-  res.status(StatusCodes.NO_CONTENT).send()
-})
-
-const resetPassword = catchAsync(async (req, res) => {
-  await authService.resetPassword(req.query['token'], req.body.password)
-  res.status(StatusCodes.NO_CONTENT).send()
-})
-
-const resetPasswordWithOtp = catchAsync(async (req, res) => {
-  await authService.resetPasswordWithOTP(req.body.email, req.body.otp, req.body.password)
-  res.status(StatusCodes.NO_CONTENT).send()
-})
-
-const sendVerificationEmail = catchAsync(async (req, res) => {
-  const verifyEmailToken = await tokenService.generateVerifyEmailToken(req.body)
-  await emailService.sendVerificationEmailWithOtp(
-    req.body.email,
-    verifyEmailToken,
-    req.body.name
-  )
-  res.status(StatusCodes.NO_CONTENT).send()
-})
-
-const verifyEmail = catchAsync(async (req, res) => {
-  await authService.verifyEmail(req.query['token'])
-  res.status(StatusCodes.NO_CONTENT).send()
-})
-
 module.exports = {
   register,
   login,
   logout,
-  refreshTokens,
-  forgotPassword,
-  forgotPasswordWithOtp,
-  resetPassword,
-  resetPasswordWithOtp,
-  sendVerificationEmail,
-  verifyEmail
 }

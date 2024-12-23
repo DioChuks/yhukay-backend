@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer')
-const config = require('../config/appConfig')
+const config = require('../config/environment')
 const logger = require('../log/logger')
 
 const transport = nodemailer.createTransport(config.email.smtp)

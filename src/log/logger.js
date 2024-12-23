@@ -1,5 +1,5 @@
 const winston = require('winston')
-const config = require('../config/appConfig')
+const config = require('../config/environment')
 
 const enumerateErrorFormat = winston.format((info) => {
   if (info instanceof Error) {
